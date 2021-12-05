@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState,Fragment} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
 
@@ -13,23 +13,23 @@ const Register = () =>{
     const handleSubmit = async e => {
       e.preventDefault()
 
-      try {
-          const {data} = await axios.post('http://localhost:8000/api/register',{
-              name,
-              email,
-              password,
-              secret
-          });
+        try {
+            const {data} = await axios.post('http://localhost:8000/api/auth/register',{
+                name,
+                email,
+                password,
+                secret
+            });
 
-          setOk(data.ok);
-      }
-      catch (err) {
-          toast.error(err.response.data);
-      }
+            setOk(data.ok);
+        }
+        catch (err) {
+            toast.error(err.response.data);
+        }
     }
 
     return (
-        <>
+        <Fragment>
             <div className="container-fluid">
                 <div className="row py-5 bg-secondary text-light">
                     <div className="col text-center">
@@ -66,13 +66,13 @@ const Register = () =>{
                             />
                         </div>
                         <div className="form-group p-2">
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
                             <small>
                                 <label className="text-muted">Password</label>
                             </small>
                             <input
                                 type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 className="form-control"
                                 placeholder="Enter Password"
                             />
@@ -109,7 +109,7 @@ const Register = () =>{
                     </form>
                 </div>
             </div>
-        </>
+        </Fragment>
 
     )
 }
