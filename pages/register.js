@@ -1,6 +1,8 @@
 import {useState,Fragment} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
+import {Modal} from 'antd';
+import Link from "next/link";
 
 const Register = () =>{
 
@@ -109,6 +111,23 @@ const Register = () =>{
                     </form>
                 </div>
             </div>
+
+            <div className="row">
+                <div className="col">
+                    <Modal
+                        title="Congratulations!"
+                        visible={ok}
+                        onCancel={()=>setOk(false)}
+                        footer={null}
+                    >
+                        <p>You have successfully registered.</p>
+                        <Link href="/login">
+                            <a className="btn btn-primary btn-sm">Login</a>
+                        </Link>
+                    </Modal>
+                </div>
+            </div>
+
         </Fragment>
 
     )
