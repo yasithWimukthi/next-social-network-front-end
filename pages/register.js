@@ -1,8 +1,9 @@
-import {useState,Fragment} from "react";
+import {useState,useCallback,Fragment} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import {Modal} from 'antd';
 import Link from "next/link";
+import AuthForm from "../components/forms/AuthForm";
 
 const Register = () =>{
 
@@ -11,10 +12,11 @@ const Register = () =>{
     const [password,setPassword] = useState("");
     const [secret,setSecret] = useState("");
     const [ok,setOk] = useState(false);
+    const [loading,setLoading] = useState(false);
 
-    const handleSubmit = async e => {
-      e.preventDefault()
-
+    const handleSubmit =useCallback( async e => {
+        e.preventDefault()
+        setLoading(true);
         try {
             const {data} = await axios.post('http://localhost:8000/api/auth/register',{
                 name,
@@ -22,13 +24,18 @@ const Register = () =>{
                 password,
                 secret
             });
-
+            setName('');
+            setEmail('');
+            setPassword('');
+            setSecret('');
             setOk(data.ok);
+            setLoading(false);
         }
         catch (err) {
             toast.error(err.response.data);
+            setLoading(false);
         }
-    }
+    },[name,email,password,secret])
 
     return (
         <Fragment>
@@ -42,73 +49,18 @@ const Register = () =>{
 
             <div className="row py-5">
                 <div className="col-md-6 offset-md-3">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group p-2">
-                            <small>
-                                <label className="text-muted">Your Name</label>
-                            </small>
-                            <input
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter Name"
-                            />
-                        </div>
-                        <div className="form-group p-2">
-                            <small>
-                                <label className="text-muted">Email</label>
-                            </small>
-                            <input
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                type="email"
-                                className="form-control"
-                                placeholder="Enter Email"
-                            />
-                        </div>
-                        <div className="form-group p-2">
-                            <small>
-                                <label className="text-muted">Password</label>
-                            </small>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="form-control"
-                                placeholder="Enter Password"
-                            />
-                        </div>
-                        <div className="form-group p-2">
-                            <small>
-                                <label className="text-muted">Pick a question</label>
-                            </small>
-                            <select className="form-control">
-                                <option>What is your favourite color?</option>
-                                <option>What is your best friend's name?</option>
-                                <option>What city you were born?</option>
-                            </select>
-
-                            <small className="form-text text-muted">
-                                You can use this to reset your password.
-                            </small>
-
-                            <div className="form-group p-2">
-                                <input
-                                    value={secret}
-                                    onChange={(e) => setSecret(e.target.value)}
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Type your answer here"
-                                />
-                            </div>
-
-                            <div className="form-group p-2">
-                                <button className="btn btn-primary col-12">Submit</button>
-                            </div>
-
-                        </div>
-                    </form>
+                    <AuthForm
+                        handleSubmit={handleSubmit}
+                        name={name}
+                        email={email}
+                        password={password}
+                        secret={secret}
+                        loading={loading}
+                        setName={setName}
+                        setEmail={setEmail}
+                        setPassword={setPassword}
+                        setSecret={setSecret}
+                    />
                 </div>
             </div>
 
