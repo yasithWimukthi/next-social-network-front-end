@@ -11,10 +11,11 @@ const AuthForm = ({
                       setEmail,
                       setSecret,
                       setName,
+                      page
                   }) => {
     return (
         <form onSubmit={handleSubmit}>
-            <div className="form-group p-2">
+            {page !== 'login' && (<div className="form-group p-2">
                 <small>
                     <label className="text-muted">Your Name</label>
                 </small>
@@ -25,7 +26,8 @@ const AuthForm = ({
                     className="form-control"
                     placeholder="Enter Name"
                 />
-            </div>
+            </div>)}
+
             <div className="form-group p-2">
                 <small>
                     <label className="text-muted">Email</label>
@@ -50,7 +52,7 @@ const AuthForm = ({
                     placeholder="Enter Password"
                 />
             </div>
-            <div className="form-group p-2">
+            {page !== 'login' && (<div className="form-group p-2">
                 <small>
                     <label className="text-muted">Pick a question</label>
                 </small>
@@ -77,11 +79,13 @@ const AuthForm = ({
                 <div className="form-group p-2">
                     <button
                         className="btn btn-primary col-12"
-                        disabled={!name || !email || !password || !secret}
+                        disabled={
+                            page === 'login' ?
+                                !email || !password :
+                                !name || !email || !password || !secret}
                     >{loading ? <SyncOutlined spin className="py-1"/> : "Submit"}</button>
                 </div>
-
-            </div>
+            </div>)}
         </form>
     )
 }
