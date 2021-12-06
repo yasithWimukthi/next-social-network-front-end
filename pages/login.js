@@ -1,15 +1,19 @@
-import {useState,useCallback,Fragment} from "react";
+import {useState, useCallback, Fragment, useContext} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import Link from "next/link";
 import AuthForm from "../components/forms/AuthForm";
 import {useRouter} from "next/router";
+import {UserContext} from "../context";
 
 const Login = () =>{
 
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [loading,setLoading] = useState(false);
+
+    const [state,setState] = useContext(UserContext);
+
     const router = useRouter();
 
     const handleSubmit =useCallback( async e => {
@@ -23,7 +27,15 @@ const Login = () =>{
             setEmail('');
             setPassword('');
             setLoading(false);
-            router.push('/');
+
+            setState({
+                user : data.user,
+                token : data.token
+            })
+
+            window.localStorage.setItem('auth',JSON.stringify(data));
+
+            // router.push('/');
         }
 
         catch (err) {
