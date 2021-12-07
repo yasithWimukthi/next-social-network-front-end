@@ -12,6 +12,10 @@ const UserProvider = ({children}) => {
 
     const router = useRouter();
 
+    const token = state && state.token ? state.token : " ";
+    axios.defaults.baseURL = "http://localhost:8000/api";
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
     useEffect(()=>{
         setState(JSON.parse(window.localStorage.getItem('auth')))
     },[])
