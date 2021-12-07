@@ -44,6 +44,8 @@ const Login = () =>{
         }
     },[email,password])
 
+    if(state && state.token) router.push('/')
+
     return (
         <Fragment>
             <div className="container-fluid">

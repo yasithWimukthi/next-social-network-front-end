@@ -1,9 +1,11 @@
-import {useState,useCallback,Fragment} from "react";
+import {useState, useCallback, Fragment, useContext} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
 import {Modal} from 'antd';
 import Link from "next/link";
 import AuthForm from "../components/forms/AuthForm";
+import {UserContext} from "../context";
+import {useRouter} from "next/router";
 
 const Register = () =>{
 
@@ -13,6 +15,9 @@ const Register = () =>{
     const [secret,setSecret] = useState("");
     const [ok,setOk] = useState(false);
     const [loading,setLoading] = useState(false);
+    const [state] = useContext(UserContext);
+
+    const router = useRouter();
 
     const handleSubmit =useCallback( async e => {
         e.preventDefault()
@@ -36,6 +41,8 @@ const Register = () =>{
             setLoading(false);
         }
     },[name,email,password,secret])
+
+    if(state && state.token) router.push('/')
 
     return (
         <Fragment>
