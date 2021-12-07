@@ -8,7 +8,7 @@ const Navigation = () => {
     const [state, setSate] = useContext(UserContext);
     const router = useRouter();
 
-    const logout = () =>{
+    const logout = () => {
         window.localStorage.removeItem('auth');
         setSate(null);
         router.push('/login')
@@ -20,15 +20,24 @@ const Navigation = () => {
                 <a className="nav-link text-light">Home</a>
             </Link>
 
-            <Link href="/login">
-                <a className="nav-link text-light">Login</a>
-            </Link>
+            {state !== null ? (
+                <>
+                    <Link href="/user/dashboard">
+                        <a className="nav-link text-light">{state && state.user && state.user.name}</a>
+                    </Link>
+                    <a onClick={logout} className="nav-link text-light">Logout</a>
+                </>
+            ) : (
+                <>
+                    <Link href="/login">
+                        <a className="nav-link text-light">Login</a>
+                    </Link>
 
-            <Link href="/register">
-                <a className="nav-link text-light">Register</a>
-            </Link>
-
-            <a onClick={logout} className="nav-link text-light">Logout</a>
+                    <Link href="/register">
+                        <a className="nav-link text-light">Register</a>
+                    </Link>
+                </>
+            )}
         </nav>
     )
 }
