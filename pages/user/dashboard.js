@@ -3,6 +3,7 @@ import CreatePostForm from "../../components/forms/CreatePostForm";
 import {useCallback, useContext, useState} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
+import axios from "axios";
 
 const Dashboard = () =>{
 
@@ -11,8 +12,13 @@ const Dashboard = () =>{
 
     const router = useRouter();
 
-    const postSubmitHandler = useCallback(event => {
+    const postSubmitHandler = useCallback(async event => {
         event.preventDefault();
+        try {
+            const {data} = axios.post('/create-post',{content});
+        }catch (e) {
+
+        }
 
     },[content])
 
