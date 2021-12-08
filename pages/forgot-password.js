@@ -1,18 +1,20 @@
 import {useState, useCallback, Fragment, useContext} from "react";
 import axios from "axios";
 import {toast} from 'react-toastify';
+import {Modal} from 'antd';
 import Link from "next/link";
-import AuthForm from "../components/forms/AuthForm";
-import {useRouter} from "next/router";
 import {UserContext} from "../context";
+import {useRouter} from "next/router";
+import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
 
-const Login = () =>{
+const ForgotPassword = () =>{
 
     const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
+    const [newPassword,setNewPassword] = useState("");
+    const [secret,setSecret] = useState("");
+    const [ok,setOk] = useState(false);
     const [loading,setLoading] = useState(false);
-
-    const [state,setState] = useContext(UserContext);
+    const [state] = useContext(UserContext);
 
     const router = useRouter();
 
@@ -20,29 +22,22 @@ const Login = () =>{
         e.preventDefault()
         setLoading(true);
         try {
-            const {data} = await axios.post('/auth/login',{
+            const {data} = await axios.post('/auth/forgot-password',{
                 email,
-                password,
+                newPassword,
+                secret
             });
             setEmail('');
-            setPassword('');
+            setNewPassword('');
+            setSecret('');
+            setOk(data.ok);
             setLoading(false);
-
-            setState({
-                user : data.user,
-                token : data.token
-            })
-
-            window.localStorage.setItem('auth',JSON.stringify(data));
-
-            // router.push('/');
         }
-
         catch (err) {
             toast.error(err.response.data);
             setLoading(false);
         }
-    },[email,password])
+    },[email,newPassword,secret])
 
     if(state && state.token) router.push('/')
 
@@ -51,43 +46,39 @@ const Login = () =>{
             <div className="container-fluid">
                 <div className="row py-5 bg-secondary text-light">
                     <div className="col text-center">
-                        <h1>Login</h1>
+                        <h1>Forgot Password</h1>
                     </div>
                 </div>
             </div>
 
             <div className="row py-5">
                 <div className="col-md-6 offset-md-3">
-                    <AuthForm
+                    <ForgotPasswordForm
                         handleSubmit={handleSubmit}
                         email={email}
-                        password={password}
+                        newPassword={newPassword}
+                        secret={secret}
                         loading={loading}
                         setEmail={setEmail}
-                        setPassword={setPassword}
-                        page="login"
+                        setNewPassword={setNewPassword}
+                        setSecret={setSecret}
                     />
                 </div>
             </div>
 
             <div className="row">
                 <div className="col">
-                    <p className="text-center">
-                        Not yet registered ? {" "}
-                        <Link href="/register">
-                            <a>Register</a>
+                    <Modal
+                        title="Congratulations!"
+                        visible={ok}
+                        onCancel={()=>setOk(false)}
+                        footer={null}
+                    >
+                        <p>Password was changed !</p>
+                        <Link href="/login">
+                            <a className="btn btn-primary btn-sm">Login</a>
                         </Link>
-                    </p>
-                </div>
-            </div>
-
-            <div className="row">
-                <div className="col">
-                    <p className="text-center">
-                        <Link href="/forgot-password">
-                            <a className="text-danger">Forgot Password</a>
-                        </Link>
-                    </p>
+                    </Modal>
                 </div>
             </div>
 
@@ -96,4 +87,4 @@ const Login = () =>{
     )
 }
 
-export default Login
+export default ForgotPassword
