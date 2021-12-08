@@ -24,18 +24,23 @@ const Login = () =>{
                 email,
                 password,
             });
-            setEmail('');
-            setPassword('');
-            setLoading(false);
 
-            setState({
-                user : data.user,
-                token : data.token
-            })
-
-            window.localStorage.setItem('auth',JSON.stringify(data));
-
-            // router.push('/');
+            if(data.error) {
+                toast.error(data.error);
+                setLoading(false);
+            }else{
+                setEmail('');
+                setPassword('');
+                setLoading(false);
+    
+                setState({
+                    user : data.user,
+                    token : data.token
+                })
+    
+                window.localStorage.setItem('auth',JSON.stringify(data));
+                router.push('/');
+            }
         }
 
         catch (err) {
