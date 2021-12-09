@@ -10,20 +10,22 @@ const Dashboard = () =>{
 
     const [state,setState] = useContext(UserContext);
     const [content,setContent] = useState("");
+    const [image,setImage] = useState("");
+    const [uploading,setUploading] = useState(false);
 
     const router = useRouter();
 
     const postSubmitHandler = useCallback(async event => {
         event.preventDefault();
         try {
-            const {data} = axios.post('/post/create-post',{content});
+            const {data} = await axios.post('/post/create-post',{content,image});
             if(data.error){
                 console.log('error')
                 toast.error(data.error);
             }else{
-                console.log('succes')
                 toast.success("post Created successfully")
                 setContent("");
+                setImage({});
             }
         }catch (e) {
             console.log(e)
@@ -36,11 +38,18 @@ const Dashboard = () =>{
         const file = event.target.files[0];
         let formData = new FormData();
         formData.append("image",file);
+        setUploading(true);
         try {
             const {data} = await axios.post('/post/upload-image',formData);
-            console.log('uploaded image '+data.url)
+            // console.log('uploaded image '+data.url)
+            setImage({
+                url : data.url,
+                public_key: data.public_key
+            })
+            setUploading(false);
         }catch (e) {
             console.log(e);
+            setUploading(false);
         }
     }
 
@@ -61,6 +70,8 @@ const Dashboard = () =>{
                             setContent={setContent}
                             postSubmitHandler={postSubmitHandler}
                             handleImage={handleImage}
+                            uploading={uploading}
+                            image={image}
                         />
                     </div>
                     <div className="col-md-4">
