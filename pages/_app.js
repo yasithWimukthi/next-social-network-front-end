@@ -4,13 +4,15 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 import {UserProvider} from "../context";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
     return (
         <UserProvider>
-            {/*<head>*/}
-            {/*    <link rel="stylesheet" href="css/style.css"/>*/}
-            {/*</head>*/}
+            <Head>
+                {/*<link rel="stylesheet" href="css/style.css"/>*/}
+                <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css"/>
+            </Head>
             <Navigation/>
             <ToastContainer position="top-center"/>
             <Component {...pageProps} />

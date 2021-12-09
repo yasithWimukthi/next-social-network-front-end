@@ -1,3 +1,7 @@
+// import ReactQuill from 'react-quill';
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(()=> import('react-quill'),{ssr:false})
 
 const CreatePostForm = ({
                             content,
@@ -8,13 +12,12 @@ const CreatePostForm = ({
         <div className="card">
             <div className="card-body pb-1">
                 <form className="form-group" onSubmit={postSubmitHandler}>
-                    <textarea
+                    <ReactQuill
+                        theme={'snow'}
                         value={content}
-                        onChange={e => setContent(e.target.value)}
+                        onChange={value => setContent(value)}
                         className="form-control"
-                        placeholder="Write something...">
-
-                    </textarea>
+                        placeholder="Write something..."/>
                 </form>
             </div>
             <div className="card-footer">
