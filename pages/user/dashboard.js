@@ -31,6 +31,19 @@ const Dashboard = () =>{
 
     },[content])
 
+
+    const handleImage = async event => {
+        const file = event.target.files[0];
+        let formData = new FormData();
+        formData.append("image",file);
+        try {
+            const {data} = await axios.post('/post/upload-image',formData);
+            console.log('uploaded image '+data.url)
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     return(
         <UserRoute>
             <div className="container-fluid">
@@ -47,6 +60,7 @@ const Dashboard = () =>{
                             content={content}
                             setContent={setContent}
                             postSubmitHandler={postSubmitHandler}
+                            handleImage={handleImage}
                         />
                     </div>
                     <div className="col-md-4">
