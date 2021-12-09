@@ -17,10 +17,9 @@ const UserRoute = ({children}) => {
 
     const getCurrentUser = async () => {
         try {
-            setLoading(true);
+            console.log(' getCurrentUser')
             const {data} = await axios.get("/auth/current-user");
             if (data.ok) setOk(true)
-            setLoading(false);
         } catch (e) {
             router.push('/login');
         }
