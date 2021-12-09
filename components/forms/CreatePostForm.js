@@ -17,9 +17,13 @@ const CreatePostForm = ({
                     </textarea>
                 </form>
             </div>
-            <dic className="card-footer">
-                <button onClick={postSubmitHandler} className="btn btn-primary mt-1">Post</button>
-            </dic>
+            <div className="card-footer">
+                <button
+                    disabled={!content}
+                    onClick={postSubmitHandler}
+                    className="btn btn-primary mt-1">
+                    Post</button>
+            </div>
         </div>
     )
 }

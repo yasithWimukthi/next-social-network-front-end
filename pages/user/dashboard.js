@@ -4,6 +4,7 @@ import {useCallback, useContext, useState} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const Dashboard = () =>{
 
@@ -15,9 +16,17 @@ const Dashboard = () =>{
     const postSubmitHandler = useCallback(async event => {
         event.preventDefault();
         try {
-            const {data} = axios.post('/create-post',{content});
+            const {data} = axios.post('/post/create-post',{content});
+            if(data.error){
+                console.log('error')
+                toast.error(data.error);
+            }else{
+                console.log('succes')
+                toast.success("post Created successfully")
+                setContent("");
+            }
         }catch (e) {
-
+            console.log(e)
         }
 
     },[content])
