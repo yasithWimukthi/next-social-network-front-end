@@ -1,6 +1,7 @@
 // import ReactQuill from 'react-quill';
 import dynamic from "next/dynamic";
-import {CameraOutlined} from "@ant-design/icons";
+import {CameraOutlined, LoadingOutlined} from "@ant-design/icons";
+import {Avatar} from "antd";
 
 const ReactQuill = dynamic(()=> import('react-quill'),{ssr:false})
 
@@ -8,7 +9,9 @@ const CreatePostForm = ({
                             content,
                             setContent,
                             postSubmitHandler,
-                            handleImage
+                            handleImage,
+                            uploading,
+                            image
                         }) => {
     return(
         <div className="card">
@@ -30,7 +33,14 @@ const CreatePostForm = ({
                     Post</button>
 
                 <label>
-                    <CameraOutlined className="mt-2"/>
+                    {
+                        image && image.url ? (
+                            <Avatar size={30} src={image.url} className="mt-1"/>
+                        ) : uploading ? (
+                            <LoadingOutlined className="mt-2"/>
+                        ) : (<CameraOutlined className="mt-2"/>)
+                    }
+
                     <input onChange={handleImage} type="file" accept="images/*" hidden/>
                 </label>
             </div>
