@@ -5,6 +5,7 @@ import {UserContext} from "../../context";
 import {useRouter} from "next/router";
 import axios from "axios";
 import {toast} from "react-toastify";
+import PostList from "../../components/cards/PostList";
 
 const Dashboard = () =>{
 
@@ -88,7 +89,13 @@ const Dashboard = () =>{
                             uploading={uploading}
                             image={image}
                         />
+
+                        <br/>
+
+                        <PostList posts={posts}/>
                     </div>
+
+
                     <div className="col-md-4">
                         
                     </div>
