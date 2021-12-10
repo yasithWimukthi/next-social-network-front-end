@@ -1,6 +1,6 @@
 import UserRoute from "../../components/routes/UserRoute";
 import CreatePostForm from "../../components/forms/CreatePostForm";
-import {useCallback, useContext, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
 import axios from "axios";
@@ -8,12 +8,27 @@ import {toast} from "react-toastify";
 
 const Dashboard = () =>{
 
-    const [state,setState] = useContext(UserContext);
+    const [state] = useContext(UserContext);
     const [content,setContent] = useState("");
     const [image,setImage] = useState("");
     const [uploading,setUploading] = useState(false);
+    const [posts, setPosts] = useState([]);
 
     const router = useRouter();
+
+    useEffect(() => {
+        if (state && state.token) fetchUserPosts();
+    },[state && state.token])
+
+    const fetchUserPosts = async () => {
+        try {
+            const {data} = await axios.get('/post/user-posts');
+            setPosts(data);
+            console.log(data)
+        }catch (e) {
+            console.log(e);
+        }
+    }
 
     const postSubmitHandler = useCallback(async event => {
         event.preventDefault();
