@@ -2,9 +2,16 @@ import renderHTML from 'react-render-html';
 import moment from "moment";
 import {Avatar} from "antd";
 import PostImage from "../images/PostImage";
-import {CommentOutlined, HeartOutlined} from "@ant-design/icons";
+import {CommentOutlined, DeleteOutlined, EditOutlined, HeartOutlined} from "@ant-design/icons";
+import {useContext} from "react";
+import {UserContext} from "../../context";
+import {useRouter} from "next/router";
 
 export const PostList = ({posts}) => {
+
+    const [state] = useContext(UserContext);
+    const router = useRouter();
+
     return (
         <>
             {
@@ -35,6 +42,18 @@ export const PostList = ({posts}) => {
                                 <div className="pt-2 pl-3" style={{marginRight:'10px', marginLeft: '5px'}}>
                                     3 comments
                                 </div>
+
+                                {
+                                    state && state.user && state.user._id === post.postedBy._id && (
+                                        <>
+                                            <EditOutlined
+                                                onClick={() => router.push(`user/post/${post._id}`)}
+                                                className="text-danger pt-2 h5 px-2 mx-auto"/>
+                                            <DeleteOutlined className="text-danger pt-2 h5 px-2 "/>
+                                        </>
+                                    )
+                                }
+
                             </div>
                         </div>
                     </div>
