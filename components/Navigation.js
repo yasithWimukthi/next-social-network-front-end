@@ -27,10 +27,23 @@ const Navigation = () => {
 
             {state !== null ? (
                 <>
-                    <Link href="/user/dashboard">
-                        <a className={`nav-link text-light ${current === '/user/dashboard' && 'active'}`}>{state && state.user && state.user.name}</a>
-                    </Link>
-                    <a onClick={logout} className="nav-link text-light">Logout</a>
+                    <div className="dropdown">
+                        <a className="btn  text-light dropdown-toggle" type="button" id="dropdownMenuButton1"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {state && state.user && state.user.name}
+                        </a>
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <Link href="/user/dashboard">
+                                    <a className={`nav-link dropdown-item  ${current === '/user/dashboard' && 'active'}`}>Dashboard</a>
+                                </Link>
+                            </li>
+                            <li>
+                                <a onClick={logout} className="nav-link ">Logout</a>
+                            </li>
+                            <li><a className="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
                 </>
             ) : (
                 <>
