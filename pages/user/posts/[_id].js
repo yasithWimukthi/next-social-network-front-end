@@ -20,7 +20,7 @@ const EditPost = () => {
     const postSubmitHandler = async e => {
         e.preventDefault();
         try {
-            const {data} = await axios.put(`/post/update-post/${_id}`);
+            const {data} = await axios.put(`/post/update-post/${_id}`,{content,image});
             if(data.error){
                 toast.error(data.error);
             }else{
@@ -50,7 +50,6 @@ const EditPost = () => {
             setUploading(false);
         }
     }
-
 
     const fetchPost = async () => {
         try {
