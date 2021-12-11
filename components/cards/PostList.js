@@ -7,7 +7,7 @@ import {useContext} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
 
-export const PostList = ({posts}) => {
+export const PostList = ({posts,handleDelete}) => {
 
     const [state] = useContext(UserContext);
     const router = useRouter();
@@ -49,7 +49,7 @@ export const PostList = ({posts}) => {
                                             <EditOutlined
                                                 onClick={() => router.push(`/user/posts/${post._id}`)}
                                                 className="text-danger pt-2 h5 px-2 mx-auto"/>
-                                            <DeleteOutlined className="text-danger pt-2 h5 px-2 "/>
+                                            <DeleteOutlined onClick={() => handleDelete(post)} className="text-danger pt-2 h5 px-2 "/>
                                         </>
                                     )
                                 }
