@@ -11,10 +11,43 @@ const AuthForm = ({
                       setEmail,
                       setSecret,
                       setName,
-                      page
+                      page,
+                      username,
+                      setUsername,
+                      about,
+                      setAbout,
+                      profileUpdate
                   }) => {
     return (
         <form onSubmit={handleSubmit}>
+            {profileUpdate && (
+                <>
+                    <div className="form-group p-2">
+                        <small>
+                            <label className="text-muted">Username</label>
+                        </small>
+                        <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Username"
+                        />
+                    </div>
+                    <div className="form-group p-2">
+                        <small>
+                            <label className="text-muted">About</label>
+                        </small>
+                        <input
+                            value={about}
+                            onChange={(e) => setAbout(e.target.value)}
+                            type="text"
+                            className="form-control"
+                            placeholder="Write about..."
+                        />
+                    </div>
+                </>
+            )}
             {page !== 'login' && (<div className="form-group p-2">
                 <small>
                     <label className="text-muted">Your Name</label>
@@ -38,6 +71,7 @@ const AuthForm = ({
                     type="email"
                     className="form-control"
                     placeholder="Enter Email"
+                    disabled={profileUpdate}
                 />
             </div>
             <div className="form-group p-2">
@@ -83,7 +117,9 @@ const AuthForm = ({
                 <button
                     className="btn btn-primary col-12"
                     disabled={
-                        page === 'login' ?
+                        profileUpdate
+                        ? loading
+                        :page === 'login' ?
                             !email || !password || loading :
                             !name || !email || !password || !secret || loading}
                 >{loading ? <SyncOutlined spin className="py-1"/> : "Submit"}</button>
