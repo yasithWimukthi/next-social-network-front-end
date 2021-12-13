@@ -3,9 +3,10 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import {toast} from "react-toastify";
 import AuthForm from "../../../components/forms/AuthForm";
-import {Modal} from "antd";
+import {Avatar, Modal} from "antd";
 import Link from "next/link";
 import {useCallback, useContext, useState, Fragment, useEffect} from "react";
+import {CameraOutlined, LoadingOutlined} from "@ant-design/icons";
 
 
 const ProfileUpdate = () => {
@@ -18,7 +19,9 @@ const ProfileUpdate = () => {
     const [secret,setSecret] = useState("");
     const [ok,setOk] = useState(false);
     const [loading,setLoading] = useState(false);
-    const [state] = useContext(UserContext);
+    const [image,setImage] = useState({});
+    const [uploading,setUploading] = useState(false);
+    const [state,setState] = useContext(UserContext);
 
     const router = useRouter();
 
@@ -28,6 +31,7 @@ const ProfileUpdate = () => {
             setAbout(state.user.about);
             setName(state.user.name);
             setEmail(state.user.email);
+            setImage(state.user.image);
         }
     },[state && state.user])
 
@@ -41,14 +45,19 @@ const ProfileUpdate = () => {
                 name,
                 email,
                 password,
-                secret
+                secret,
+                image
             });
 
             if(data.error) {
                 toast.error(data.error);
                 setLoading(false);
             }else{
-                setOk(data.ok);
+                let auth = JSON.parse(localStorage.getItem('auth'));
+                auth.user = data;
+                localStorage.setItem('auth',JSON.stringify(auth));
+                setState({...state,user:data});
+                setOk(true);
                 setLoading(false);
             }
 
@@ -58,6 +67,25 @@ const ProfileUpdate = () => {
             setLoading(false);
         }
     },[name,email,password,secret])
+
+    const handleImage = async event => {
+        const file = event.target.files[0];
+        let formData = new FormData();
+        formData.append("image",file);
+        setUploading(true);
+        try {
+            const {data} = await axios.post('/post/upload-image',formData);
+            // console.log('uploaded image '+data.url)
+            setImage({
+                url : data.url,
+                public_key: data.public_key
+            })
+            setUploading(false);
+        }catch (e) {
+            console.log(e);
+            setUploading(false);
+        }
+    }
 
     return (
         <Fragment>
@@ -71,6 +99,19 @@ const ProfileUpdate = () => {
 
             <div className="row py-5">
                 <div className="col-md-6 offset-md-3">
+
+                    <label className="d-flex justify-content-center h5">
+                        {
+                            image && image.url ? (
+                                <Avatar size={30} src={image.url} className="mt-1"/>
+                            ) : uploading ? (
+                                <LoadingOutlined className="mt-2"/>
+                            ) : (<CameraOutlined className="mt-2"/>)
+                        }
+
+                        <input onChange={handleImage} type="file" accept="images/*" hidden/>
+                    </label>
+
                     <AuthForm
                         handleSubmit={handleSubmit}
                         name={name}
@@ -99,10 +140,7 @@ const ProfileUpdate = () => {
                         onCancel={()=>setOk(false)}
                         footer={null}
                     >
-                        <p>You have successfully registered.</p>
-                        <Link href="/login">
-                            <a className="btn btn-primary btn-sm">Login</a>
-                        </Link>
+                        <p>You have successfully updated your profile.</p>
                     </Modal>
                 </div>
             </div>
