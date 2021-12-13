@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import {toast} from "react-toastify";
 import PostList from "../../components/cards/PostList";
+import People from "../../components/cards/People";
 
 const Dashboard = () =>{
 
@@ -14,11 +15,15 @@ const Dashboard = () =>{
     const [image,setImage] = useState("");
     const [uploading,setUploading] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [people, setPeople] = useState([]);
 
     const router = useRouter();
 
     useEffect(() => {
-        if (state && state.token) fetchUserPosts();
+        if (state && state.token) {
+            fetchUserPosts();
+            findPeople();
+        };
     },[state && state.token])
 
     const fetchUserPosts = async () => {
@@ -82,6 +87,15 @@ const Dashboard = () =>{
         }
     }
 
+    const findPeople = async () => {
+        try {
+            const {data} = await axios.get('/auth/find-people');
+            setPeople(data);
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     return(
         <UserRoute>
             <div className="container-fluid">
@@ -110,7 +124,7 @@ const Dashboard = () =>{
 
 
                     <div className="col-md-4">
-                        
+                        <People people={people}/>
                     </div>
                 </div>
         </UserRoute>
