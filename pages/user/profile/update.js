@@ -18,7 +18,7 @@ const ProfileUpdate = () => {
     const [secret,setSecret] = useState("");
     const [ok,setOk] = useState(false);
     const [loading,setLoading] = useState(false);
-    const [state] = useContext(UserContext);
+    const [state,setState] = useContext(UserContext);
 
     const router = useRouter();
 
@@ -48,7 +48,11 @@ const ProfileUpdate = () => {
                 toast.error(data.error);
                 setLoading(false);
             }else{
-                setOk(data.ok);
+                let auth = JSON.parse(localStorage.getItem('auth'));
+                auth.user = data;
+                localStorage.setItem('auth',JSON.stringify(auth));
+                setState({...state,user:data});
+                setOk(true);
                 setLoading(false);
             }
 
@@ -99,10 +103,7 @@ const ProfileUpdate = () => {
                         onCancel={()=>setOk(false)}
                         footer={null}
                     >
-                        <p>You have successfully registered.</p>
-                        <Link href="/login">
-                            <a className="btn btn-primary btn-sm">Login</a>
-                        </Link>
+                        <p>You have successfully updated your profile.</p>
                     </Modal>
                 </div>
             </div>
