@@ -96,6 +96,14 @@ const Dashboard = () =>{
         }
     }
 
+    const handleFollow = async user => {
+        try {
+            const {data} = await axios.put('/auth/user-follow',{_id: user._id})
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     return(
         <UserRoute>
             <div className="container-fluid">
@@ -124,7 +132,7 @@ const Dashboard = () =>{
 
 
                     <div className="col-md-4">
-                        <People people={people}/>
+                        <People people={people} handleFollow={handleFollow}/>
                     </div>
                 </div>
         </UserRoute>
