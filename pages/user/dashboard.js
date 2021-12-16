@@ -10,7 +10,7 @@ import People from "../../components/cards/People";
 
 const Dashboard = () =>{
 
-    const [state] = useContext(UserContext);
+    const [state,setState] = useContext(UserContext);
     const [content,setContent] = useState("");
     const [image,setImage] = useState("");
     const [uploading,setUploading] = useState(false);
@@ -28,7 +28,7 @@ const Dashboard = () =>{
 
     const fetchUserPosts = async () => {
         try {
-            const {data} = await axios.get('/post/user-posts');
+            const {data} = await axios.get('/post/news-feed');
             setPosts(data);
             console.log(data)
         }catch (e) {
@@ -99,6 +99,18 @@ const Dashboard = () =>{
     const handleFollow = async user => {
         try {
             const {data} = await axios.put('/auth/user-follow',{_id: user._id})
+            // console.log(data)
+            //update local storage
+            let auth = JSON.parse(localStorage.getItem('auth'));
+            auth.user = data;
+            localStorage.setItem('auth', JSON.stringify(auth));
+            // update context
+            setState({...state,user:data});
+            //update people state
+            let filtered = people.filter(person => person._id !== user._id);
+            setPeople(filtered);
+            fetchUserPosts();
+            toast.success(`Following ${user.name}`);
         }catch (e) {
             console.log(e);
         }
