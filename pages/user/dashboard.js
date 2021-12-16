@@ -7,6 +7,7 @@ import axios from "axios";
 import {toast} from "react-toastify";
 import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
+import Link from "next/link";
 
 const Dashboard = () =>{
 
@@ -144,6 +145,11 @@ const Dashboard = () =>{
 
 
                     <div className="col-md-4">
+                        {state && state.user && state.user.following && (
+                            <Link hre={'/user/following'}>
+                                <a className="h6">Following</a>
+                            </Link>
+                        )}
                         <People people={people} handleFollow={handleFollow}/>
                     </div>
                 </div>
