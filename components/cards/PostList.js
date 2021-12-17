@@ -2,12 +2,12 @@ import renderHTML from 'react-render-html';
 import moment from "moment";
 import {Avatar} from "antd";
 import PostImage from "../images/PostImage";
-import {CommentOutlined, DeleteOutlined, EditOutlined, HeartOutlined} from "@ant-design/icons";
+import {CommentOutlined, DeleteOutlined, EditOutlined, HeartFilled, HeartOutlined} from "@ant-design/icons";
 import {useContext} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
 
-export const PostList = ({posts,handleDelete}) => {
+export const PostList = ({posts,handleDelete,handleLike,handleUnlike}) => {
 
     const [state] = useContext(UserContext);
     const router = useRouter();
@@ -34,7 +34,21 @@ export const PostList = ({posts,handleDelete}) => {
                                 )
                             }
                             <div className="d-flex pt-2">
-                                <HeartOutlined className="text-danger pt-2 h5"/>
+
+                                {
+                                    post.likes.includes(state.user._id)  ? (
+                                        <HeartFilled
+                                            onClick={()=>handleUnlike(post._id)}
+                                            className="text-danger pt-2 h5"
+                                        />
+                                    ) : (
+                                        <HeartOutlined
+                                            onClick={()=>handleLike(post._id)}
+                                            className="text-danger pt-2 h5"
+                                        />
+                                    )
+                                }
+
                                 <div className="pt-2 pl-3" style={{marginRight:'10px', marginLeft: '5px'}}>
                                     3 likes
                                 </div>
