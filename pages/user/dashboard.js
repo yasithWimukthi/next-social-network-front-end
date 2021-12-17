@@ -146,7 +146,7 @@ const Dashboard = () =>{
 
                     <div className="col-md-4">
                         {state && state.user && state.user.following && (
-                            <Link hre={'/user/following'}>
+                            <Link href={'/user/following'}>
                                 <a className="h6">Following</a>
                             </Link>
                         )}
