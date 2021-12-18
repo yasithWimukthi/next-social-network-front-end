@@ -6,8 +6,9 @@ import {CommentOutlined, DeleteOutlined, EditOutlined, HeartFilled, HeartOutline
 import {useContext} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
+import Link from "next/link";
 
-export const PostList = ({posts,handleDelete,handleLike,handleUnlike}) => {
+export const PostList = ({posts, handleDelete, handleLike, handleUnlike, handleComment}) => {
 
     const [state] = useContext(UserContext);
     const router = useRouter();
@@ -18,11 +19,12 @@ export const PostList = ({posts,handleDelete,handleLike,handleUnlike}) => {
                 posts && posts.map(post => (
                     <div key={post._id} className="card mb-5">
                         <div className="card-header">
-                                <Avatar size={40}>
-                                    {post.postedBy.name[0]}
-                                </Avatar> {" "}
-                                <span className="pt-2 ml-3" style={{marginLeft:'10px'}}>{post.postedBy.name}</span>
-                                <span className="pt-2 ml-3" style={{marginLeft:'10px'}}>{moment(post.createdAt).fromNow()}</span>
+                            <Avatar size={40}>
+                                {post.postedBy.name[0]}
+                            </Avatar> {" "}
+                            <span className="pt-2 ml-3" style={{marginLeft: '10px'}}>{post.postedBy.name}</span>
+                            <span className="pt-2 ml-3"
+                                  style={{marginLeft: '10px'}}>{moment(post.createdAt).fromNow()}</span>
                         </div>
                         <div className="card-body">
                             {renderHTML(post.content)}
@@ -36,25 +38,30 @@ export const PostList = ({posts,handleDelete,handleLike,handleUnlike}) => {
                             <div className="d-flex pt-2">
 
                                 {
-                                    post.likes.includes(state.user._id)  ? (
+                                    state && state.user && post.likes && post.likes.includes(state.user._id) ? (
                                         <HeartFilled
-                                            onClick={()=>handleUnlike(post._id)}
+                                            onClick={() => handleUnlike(post._id)}
                                             className="text-danger pt-2 h5"
                                         />
                                     ) : (
                                         <HeartOutlined
-                                            onClick={()=>handleLike(post._id)}
+                                            onClick={() => handleLike(post._id)}
                                             className="text-danger pt-2 h5"
                                         />
                                     )
                                 }
 
-                                <div className="pt-2 pl-3" style={{marginRight:'10px', marginLeft: '5px'}}>
+                                <div className="pt-2 pl-3" style={{marginRight: '10px', marginLeft: '5px'}}>
                                     {post.likes.length} likes
                                 </div>
-                                <CommentOutlined className="text-danger pt-2 h5"/>
-                                <div className="pt-2 pl-3" style={{marginRight:'10px', marginLeft: '5px'}}>
-                                    3 comments
+                                <CommentOutlined
+                                    onClick={() => handleComment(post)}
+                                    className="text-danger pt-2 h5"
+                                />
+                                <div className="pt-2 pl-3" style={{marginRight: '10px', marginLeft: '5px'}}>
+                                    <Link href={`/post/${post._id}`}>
+                                        <a>{post.comments.length} comments</a>
+                                    </Link>
                                 </div>
 
                                 {
@@ -63,7 +70,8 @@ export const PostList = ({posts,handleDelete,handleLike,handleUnlike}) => {
                                             <EditOutlined
                                                 onClick={() => router.push(`/user/posts/${post._id}`)}
                                                 className="text-danger pt-2 h5 px-2 mx-auto"/>
-                                            <DeleteOutlined onClick={() => handleDelete(post)} className="text-danger pt-2 h5 px-2 "/>
+                                            <DeleteOutlined onClick={() => handleDelete(post)}
+                                                            className="text-danger pt-2 h5 px-2 "/>
                                         </>
                                     )
                                 }
