@@ -50,7 +50,7 @@ export const PostList = ({posts,handleDelete,handleLike,handleUnlike}) => {
                                 }
 
                                 <div className="pt-2 pl-3" style={{marginRight:'10px', marginLeft: '5px'}}>
-                                    3 likes
+                                    {post.likes.length} likes
                                 </div>
                                 <CommentOutlined className="text-danger pt-2 h5"/>
                                 <div className="pt-2 pl-3" style={{marginRight:'10px', marginLeft: '5px'}}>
