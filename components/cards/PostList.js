@@ -7,6 +7,7 @@ import {useContext} from "react";
 import {UserContext} from "../../context";
 import {useRouter} from "next/router";
 import Link from "next/link";
+import {imageSource} from "../../functions";
 
 export const PostList = ({posts, handleDelete, handleLike, handleUnlike, handleComment}) => {
 
@@ -78,6 +79,32 @@ export const PostList = ({posts, handleDelete, handleLike, handleUnlike, handleC
 
                             </div>
                         </div>
+                        {
+                            post.comments && post.comments.length > 0 && (
+                                <ol className="list-group">
+                                    {
+                                        post.comments.map(comment => (
+                                            <li className="list-group-item d-flex justify-content-between align-items-start">
+                                                <div className="ms-2 me-auto">
+                                                    <div>
+                                                        <Avatar
+                                                            size={20}
+                                                            className="mb-1 mr-3"
+                                                            src={imageSource(comment.postedBy)}
+                                                        />
+                                                        {comment.postedBy.name}
+                                                    </div>
+                                                    <div>{comment.text}</div>
+                                                </div>
+                                                <span className="badge rounded-pill text-muted">
+                                                    {moment(comment.created).fromNow()}
+                                                </span>
+                                            </li>
+                                        ))
+                                    }
+                                </ol>
+                            )
+                        }
                     </div>
                 ))
             }
