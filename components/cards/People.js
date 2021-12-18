@@ -1,15 +1,8 @@
 import {List} from "antd";
 import Avatar from "antd/es/avatar/avatar";
+import {imageSource} from "../../functions";
 
 const People = ({people,handleFollow}) => {
-
-    const imageSource = user => {
-        if (user.image){
-            return user.image.url;
-        }else{
-            return 'images/user.jpg';
-        }
-    }
 
     return (
         <>
