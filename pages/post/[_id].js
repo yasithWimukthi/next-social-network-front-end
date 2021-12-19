@@ -21,9 +21,18 @@ const PostComment = () => {
         }
     }
 
+    const removeComment = async (postId,comment) =>{
+        try {
+            const {data} = await axios.put('/post/remove-comment',{postId,comment});
+            fetchPost();
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <div className="row col-md-8 offset-md-2">
-            <Post post={post}/>
+            <Post post={post} removeComment={removeComment}/>
         </div>
 
     )

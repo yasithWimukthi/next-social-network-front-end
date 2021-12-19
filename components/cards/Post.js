@@ -9,7 +9,7 @@ import {useRouter} from "next/router";
 import Link from "next/link";
 import {imageSource} from "../../functions";
 
-export const Post = ({post, handleDelete, handleLike, handleUnlike, handleComment}) => {
+export const Post = ({post, handleDelete, handleLike, handleUnlike, handleComment,removeComment}) => {
 
     const [state] = useContext(UserContext);
     const router = useRouter();
@@ -95,8 +95,17 @@ export const Post = ({post, handleDelete, handleLike, handleUnlike, handleCommen
                                             <div>{comment.text}</div>
                                         </div>
                                         <span className="badge rounded-pill text-muted">
-                                                    {moment(comment.created).fromNow()}
-                                                </span>
+                                            {moment(comment.created).fromNow()}
+                                            {
+                                                state && state.user && state.user._id === comment.postedBy._id &&(
+                                                    <div className="ml-auto mt-1">
+                                                        <DeleteOutlined
+                                                            onClick={() =>removeComment(post._id,comment)}
+                                                            className="pl-2 text-danger"/>
+                                                    </div>
+                                                )
+                                            }
+                                        </span>
                                     </li>
                                 ))
                             }
