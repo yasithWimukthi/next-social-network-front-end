@@ -8,7 +8,7 @@ import {toast} from "react-toastify";
 import PostList from "../../components/cards/PostList";
 import People from "../../components/cards/People";
 import Link from "next/link";
-import {Modal} from "antd";
+import {Modal, Pagination} from "antd";
 import CommentForm from "../../components/forms/CommentForm";
 
 const Dashboard = () => {
@@ -22,6 +22,8 @@ const Dashboard = () => {
     const [comment, setComment] = useState('');
     const [visible, setVisible] = useState(false);
     const [currentPost, setCurrentPost] = useState({});
+    const [totalPosts, setTotalPosts] = useState(0);
+    const [page, setPage] = useState(1);
 
     const router = useRouter();
 
@@ -31,11 +33,20 @@ const Dashboard = () => {
             findPeople();
         }
         ;
-    }, [state && state.token])
+    }, [state && state.token,page])
+
+    useEffect(()=>{
+        try {
+            axios.get('/post/total-posts')
+                .then(({data})=>setTotalPosts(data))
+        }catch (e) {
+            console.log(e);
+        }
+    },[])
 
     const fetchUserPosts = async () => {
         try {
-            const {data} = await axios.get('/post/news-feed');
+            const {data} = await axios.get(`/post/news-feed/${page}`);
             setPosts(data);
             console.log(data)
         } catch (e) {
@@ -51,6 +62,7 @@ const Dashboard = () => {
                 console.log('error')
                 toast.error(data.error);
             } else {
+                setPage(1);
                 toast.success("post Created successfully")
                 fetchUserPosts();
                 setContent("");
@@ -194,6 +206,11 @@ const Dashboard = () => {
                         handleLike={handleLike}
                         handleUnlike={handleUnlike}
                         handleComment={handleComment}
+                    />
+                    <Pagination
+                        current={page}
+                        total={(totalPosts/3)*10}
+                        onChange={value => setPage(value)}
                     />
                 </div>
 

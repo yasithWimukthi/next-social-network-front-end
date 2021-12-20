@@ -13,6 +13,7 @@ export const PostList = ({posts, handleDelete, handleLike, handleUnlike, handleC
             {
                 posts && posts.map(post => (
                     <Post
+                        key={post._id}
                         post={post}
                         handleDelete={handleDelete}
                         handleLike={handleLike}

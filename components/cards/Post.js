@@ -82,7 +82,7 @@ export const Post = ({post, handleDelete, handleLike, handleUnlike, handleCommen
                         <ol className="list-group">
                             {
                                 post.comments.map(comment => (
-                                    <li className="list-group-item d-flex justify-content-between align-items-start">
+                                    <li key={comment._id} className="list-group-item d-flex justify-content-between align-items-start">
                                         <div className="ms-2 me-auto">
                                             <div>
                                                 <Avatar
