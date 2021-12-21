@@ -10,6 +10,7 @@ import People from "../../components/cards/People";
 import Link from "next/link";
 import {Modal, Pagination} from "antd";
 import CommentForm from "../../components/forms/CommentForm";
+import Search from "../../components/Search";
 
 const Dashboard = () => {
 
@@ -211,14 +212,17 @@ const Dashboard = () => {
                         current={page}
                         total={(totalPosts/3)*10}
                         onChange={value => setPage(value)}
+                        className="pb-5"
                     />
                 </div>
 
 
                 <div className="col-md-4">
+                    <Search/>
+                    <br/>
                     {state && state.user && state.user.following && (
                         <Link href={'/user/following'}>
-                            <a className="h6">Following</a>
+                            <a className="h6">{state.user.following.length} Following</a>
                         </Link>
                     )}
                     <People people={people} handleFollow={handleFollow}/>
