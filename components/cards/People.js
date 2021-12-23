@@ -3,6 +3,7 @@ import Avatar from "antd/es/avatar/avatar";
 import {imageSource} from "../../functions";
 import {useContext} from "react";
 import {UserContext} from "../../context";
+import Link from "next/link";
 
 const People = ({people,handleFollow,handleUnfollow}) => {
 
@@ -19,7 +20,10 @@ const People = ({people,handleFollow,handleUnfollow}) => {
                             avatar={<Avatar src={imageSource(user)} />}
                             title={
                                 <div className="d-flex justify-content-between">
-                                    {user.username} {" "}
+                                    <Link href={`/user/${user.username}`}>
+                                        <a>{user.username} {" "}</a>
+                                    </Link>
+
                                     {
                                         state &&
                                         state.user &&
